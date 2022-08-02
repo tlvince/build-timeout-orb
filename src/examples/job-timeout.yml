@@ -1,0 +1,19 @@
+description: Cancels a job after 10 seconds. Depends on the "CIRCLE_TOKEN" environment variable, which can be set in the job environement or via a Context per this example.
+usage:
+  version: 2.1
+  orbs:
+    build-timeout: tlvince/build-timeout@x.y # Ensure you are using the latest version of the orb
+  jobs:
+    build:
+      docker:
+        - image: node
+      steps:
+        - build-timeout/set-job-timeout:
+            duration: 10s
+        - checkout
+        - run: sleep 20s
+  workflows:
+    build:
+      jobs:
+        - build:
+            context: build-timeout

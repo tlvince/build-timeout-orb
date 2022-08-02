@@ -1,0 +1,13 @@
+description: Set a maximum runtime for a job. Takes precedence over no_output_timeout. Should be lower than the maximum runtime of the pricing plan.
+parameters:
+  duration:
+    type: string
+    default: 30m
+steps:
+  - run:
+      name: Cancel job after << parameters.duration >>
+      background: true
+      command: |
+        sleep << parameters.duration >>
+        echo "Cancelling job as << parameters.duration >> has elapsed"
+        curl -X POST -H "Circle-Token: ${CIRCLE_TOKEN}" "https://circleci.com/api/v2/project/gh/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/job/${CIRCLE_BUILD_NUM}/cancel"
